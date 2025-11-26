@@ -83,17 +83,17 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DB_ENGINE = os.getenv('DB_ENGINE', 'sqlite').lower()
+DB_ENGINE = os.getenv('DB_ENGINE', 'sqlite3').lower()
 
-if DB_ENGINE == 'mysql':
+if DB_ENGINE == 'sqlite':
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': os.getenv('MYSQL_DATABASE', 'saas'),
-            'USER': os.getenv('MYSQL_USER', 'root'),
-            'PASSWORD': os.getenv('MYSQL_PASSWORD', ''),
-            'HOST': os.getenv('MYSQL_HOST', 'localhost'),
-            'PORT': os.getenv('MYSQL_PORT', '3306'),
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.getenv('SQLITE_DATABASE', 'saas'),
+            'USER': os.getenv('SQLITE_USER', 'root'),
+            'PASSWORD': os.getenv('SQLITE_PASSWORD', ''),
+            'HOST': os.getenv('SQLITE_HOST', 'localhost'),
+            'PORT': os.getenv('SQLITE_PORT', '3306'),
             'OPTIONS': {
                 'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
             },
