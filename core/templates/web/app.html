@@ -1,0 +1,221 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cash Flow | App</title>
+    <link rel="stylesheet" href="{% static 'web/app.css' %}">
+</head>
+<body class="app-body">
+    <div class="app-shell">
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">Cash Flow</p>
+                <h1>Painel Operacional</h1>
+            </div>
+            <div class="topbar-actions">
+                <span id="session-status" class="session-pill">Sessao carregando...</span>
+                <button id="logout-button" class="ghost-button" type="button">Sair</button>
+            </div>
+        </header>
+
+        <section class="summary-grid">
+            <article class="summary-card">
+                <span>Organizacoes</span>
+                <strong id="organization-count">0</strong>
+            </article>
+            <article class="summary-card">
+                <span>Contas</span>
+                <strong id="account-count">0</strong>
+            </article>
+            <article class="summary-card">
+                <span>Categorias</span>
+                <strong id="category-count">0</strong>
+            </article>
+            <article class="summary-card">
+                <span>Transacoes</span>
+                <strong id="transaction-count">0</strong>
+            </article>
+        </section>
+
+        <p id="global-feedback" class="feedback" aria-live="polite"></p>
+
+        <section class="panel-grid">
+            <article class="panel-card">
+                <div class="card-header">
+                    <p class="eyebrow">Organizacao ativa</p>
+                    <h2>Contexto de trabalho</h2>
+                </div>
+                <label class="stack-field">
+                    <span>Selecionar organizacao</span>
+                    <select id="organization-select"></select>
+                </label>
+
+                <form id="organization-form" class="stack-form">
+                    <label>
+                        <span>Nova organizacao</span>
+                        <input name="name" type="text" placeholder="Ex.: Finance Corp" required>
+                    </label>
+                    <label>
+                        <span>Moeda</span>
+                        <input name="currency" type="text" value="BRL" maxlength="5" required>
+                    </label>
+                    <label>
+                        <span>Timezone</span>
+                        <input name="timezone" type="text" value="America/Sao_Paulo" required>
+                    </label>
+                    <button type="submit" class="primary-button">Criar organizacao</button>
+                </form>
+            </article>
+
+            <article class="panel-card">
+                <div class="card-header">
+                    <p class="eyebrow">Cadastros</p>
+                    <h2>Conta e categoria</h2>
+                </div>
+
+                <form id="account-form" class="stack-form">
+                    <label>
+                        <span>Nome da conta</span>
+                        <input name="name" type="text" required>
+                    </label>
+                    <label>
+                        <span>Descricao</span>
+                        <input name="description" type="text">
+                    </label>
+                    <label>
+                        <span>Tipo</span>
+                        <select name="type" required>
+                            <option value="RECEITA">Receita</option>
+                            <option value="DESPESA">Despesa</option>
+                            <option value="CUSTO">Custo</option>
+                            <option value="INVESTIMENTO">Investimento</option>
+                            <option value="IMPOSTO">Imposto</option>
+                        </select>
+                    </label>
+                    <button type="submit" class="primary-button">Criar conta</button>
+                </form>
+
+                <form id="category-form" class="stack-form">
+                    <label>
+                        <span>Nome da categoria</span>
+                        <input name="name" type="text" required>
+                    </label>
+                    <label>
+                        <span>Descricao</span>
+                        <input name="description" type="text">
+                    </label>
+                    <button type="submit" class="primary-button">Criar categoria</button>
+                </form>
+            </article>
+
+            <article class="panel-card panel-card-wide">
+                <div class="card-header">
+                    <p class="eyebrow">Lancamentos</p>
+                    <h2>Nova transacao</h2>
+                </div>
+
+                <form id="transaction-form" class="stack-form two-columns">
+                    <label>
+                        <span>Conta</span>
+                        <select name="account" id="transaction-account" required></select>
+                    </label>
+                    <label>
+                        <span>Categoria</span>
+                        <select name="category" id="transaction-category">
+                            <option value="">Sem categoria</option>
+                        </select>
+                    </label>
+                    <label>
+                        <span>Tipo</span>
+                        <select name="kind" required>
+                            <option value="RECEITA">Receita</option>
+                            <option value="DESPESA">Despesa</option>
+                            <option value="CUSTO">Custo</option>
+                            <option value="INVESTIMENTO">Investimento</option>
+                            <option value="IMPOSTO">Imposto</option>
+                        </select>
+                    </label>
+                    <label>
+                        <span>Status</span>
+                        <select name="status" required>
+                            <option value="PLANNED">Prevista</option>
+                            <option value="CONFIRMED">Confirmada</option>
+                        </select>
+                    </label>
+                    <label>
+                        <span>Valor</span>
+                        <input name="amount" type="number" min="0" step="0.01" required>
+                    </label>
+                    <label>
+                        <span>Competencia</span>
+                        <input name="competence_date" type="date" required>
+                    </label>
+                    <label>
+                        <span>Pagamento</span>
+                        <input name="payment_date" type="date">
+                    </label>
+                    <label>
+                        <span>Descricao</span>
+                        <input name="description" type="text">
+                    </label>
+                    <label class="full-span">
+                        <span>Observacoes</span>
+                        <textarea name="notes" rows="3"></textarea>
+                    </label>
+                    <button type="submit" class="primary-button full-span">Criar transacao</button>
+                </form>
+            </article>
+
+            <article class="panel-card">
+                <div class="card-header">
+                    <p class="eyebrow">Fluxo de caixa</p>
+                    <h2>Resumo diario</h2>
+                </div>
+
+                <form id="cashflow-form" class="stack-form">
+                    <label>
+                        <span>Inicio</span>
+                        <input name="start" type="date" required>
+                    </label>
+                    <label>
+                        <span>Fim</span>
+                        <input name="end" type="date" required>
+                    </label>
+                    <button type="submit" class="primary-button">Atualizar resumo</button>
+                </form>
+            </article>
+
+            <article class="panel-card panel-card-wide">
+                <div class="card-header">
+                    <p class="eyebrow">Listagens</p>
+                    <h2>Dados da organizacao</h2>
+                </div>
+
+                <div class="data-block">
+                    <h3>Contas</h3>
+                    <div id="accounts-list" class="list-grid"></div>
+                </div>
+
+                <div class="data-block">
+                    <h3>Categorias</h3>
+                    <div id="categories-list" class="list-grid"></div>
+                </div>
+
+                <div class="data-block">
+                    <h3>Transacoes</h3>
+                    <div id="transactions-list" class="table-scroll"></div>
+                </div>
+
+                <div class="data-block">
+                    <h3>Resumo de caixa</h3>
+                    <div id="cashflow-list" class="table-scroll"></div>
+                </div>
+            </article>
+        </section>
+    </div>
+
+    <script src="{% static 'web/app.js' %}"></script>
+</body>
+</html>

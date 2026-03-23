@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cash Flow | Login</title>
+    <link rel="stylesheet" href="{% static 'web/app.css' %}">
+</head>
+<body class="auth-body">
+    <main class="auth-shell">
+        <section class="hero-card">
+            <p class="eyebrow">Painel Financeiro</p>
+            <h1>Entre para gerenciar organizacoes, contas e fluxo de caixa.</h1>
+            <p class="hero-copy">
+                A interface usa a propria API JWT do projeto. Depois do login, voce consegue
+                navegar pelos dados principais e cadastrar itens essenciais sem sair do navegador.
+            </p>
+            <ul class="feature-list">
+                <li>Autenticacao com JWT</li>
+                <li>Gestao de organizacoes e lancamentos</li>
+                <li>Resumo diario de fluxo de caixa</li>
+            </ul>
+        </section>
+
+        <section class="auth-card">
+            <div class="card-header">
+                <p class="eyebrow">Acesso</p>
+                <h2>Login</h2>
+            </div>
+
+            <form id="login-form" class="stack-form">
+                <label>
+                    <span>Usuario</span>
+                    <input id="username" name="username" type="text" autocomplete="username" required>
+                </label>
+
+                <label>
+                    <span>Senha</span>
+                    <input id="password" name="password" type="password" autocomplete="current-password" required>
+                </label>
+
+                <button type="submit" class="primary-button">Entrar</button>
+            </form>
+
+            <p id="login-feedback" class="feedback" aria-live="polite"></p>
+
+            <div class="help-card">
+                <strong>Rotas uteis</strong>
+                <a href="/admin/" target="_blank" rel="noreferrer">Abrir admin</a>
+                <a href="/api/" target="_blank" rel="noreferrer">Abrir raiz da API</a>
+            </div>
+        </section>
+    </main>
+
+    <script src="{% static 'web/login.js' %}"></script>
+</body>
+</html>
