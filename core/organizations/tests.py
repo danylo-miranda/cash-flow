@@ -31,3 +31,22 @@ class OrganizationApiTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]["id"], org_1.id)
+
+
+class MembershipApiTests(APITestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(username="member", password="pass123")
+        self.other_user = get_user_model().objects.create_user(username="other_member", password="pass123")
+        self.organization = Organization.objects.create(name="Members Org")
+        Membership.objects.create(user=self.user, organization=self.organization, is_active=False)
+        Membership.objects.create(user=self.other_user, organization=self.organization, is_active=True)
+
+    def test_inactive_requester_cannot_list_memberships(self):
+        self.client.force_authenticate(self.user)
+        response = self.client.get(
+            reverse("membership-list"),
+            data={"organization": self.organization.id},
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 0)

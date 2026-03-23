@@ -1,5 +1,7 @@
 from rest_framework import mixins, permissions, viewsets
 
+from organizations.models import Membership
+
 from .models import User
 from .serializers import UserSerializer
 
@@ -13,4 +15,12 @@ class UserViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.Gen
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return User.objects.filter(is_active=True)
+        organization_ids = Membership.objects.filter(
+            user=self.request.user,
+            is_active=True,
+        ).values_list("organization_id", flat=True)
+        return User.objects.filter(
+            is_active=True,
+            memberships__organization_id__in=organization_ids,
+            memberships__is_active=True,
+        ).distinct()

@@ -1,4 +1,5 @@
 from rest_framework import filters, permissions, viewsets
+from rest_framework.exceptions import PermissionDenied
 
 from organizations.permissions import IsOrganizationMember
 from organizations.models import Membership
@@ -23,6 +24,14 @@ class MembershipScopedQuerysetMixin:
             queryset = queryset.filter(organization_id=organization_id)
         return queryset
 
+    def ensure_active_membership(self, organization):
+        if not Membership.objects.filter(
+            user=self.request.user,
+            organization=organization,
+            is_active=True,
+        ).exists():
+            raise PermissionDenied("Voce nao possui acesso ativo a esta organizacao.")
+
 
 class AccountViewSet(MembershipScopedQuerysetMixin, viewsets.ModelViewSet):
     serializer_class = AccountSerializer
@@ -35,7 +44,7 @@ class AccountViewSet(MembershipScopedQuerysetMixin, viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         organization = serializer.validated_data["organization"]
-        Membership.objects.get(user=self.request.user, organization=organization, is_active=True)
+        self.ensure_active_membership(organization)
         serializer.save()
 
 
@@ -45,6 +54,11 @@ class CategoryViewSet(MembershipScopedQuerysetMixin, viewsets.ModelViewSet):
 
     def get_queryset(self):
         return self.get_organization_filtered_queryset(Category.objects.all())
+
+    def perform_create(self, serializer):
+        organization = serializer.validated_data["organization"]
+        self.ensure_active_membership(organization)
+        serializer.save()
 
 
 class TransactionViewSet(MembershipScopedQuerysetMixin, viewsets.ModelViewSet):
@@ -67,4 +81,6 @@ class TransactionViewSet(MembershipScopedQuerysetMixin, viewsets.ModelViewSet):
         return queryset
 
     def perform_create(self, serializer):
+        organization = serializer.validated_data["organization"]
+        self.ensure_active_membership(organization)
         serializer.save(created_by=self.request.user)

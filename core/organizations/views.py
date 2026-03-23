@@ -30,7 +30,11 @@ class MembershipViewSet(mixins.ListModelMixin, mixins.UpdateModelMixin, viewsets
 
     def get_queryset(self):
         organization_id = self.request.query_params.get("organization")
-        qs = Membership.objects.filter(organization__memberships__user=self.request.user, is_active=True)
+        qs = Membership.objects.filter(
+            organization__memberships__user=self.request.user,
+            organization__memberships__is_active=True,
+            is_active=True,
+        ).distinct()
         if organization_id:
             qs = qs.filter(organization_id=organization_id)
         return qs.select_related("user", "organization")
