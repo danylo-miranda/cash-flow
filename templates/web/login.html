@@ -1,0 +1,104 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cash Flow | Acesso</title>
+    <link rel="stylesheet" href="{% static 'web/app.css' %}">
+
+    <!-- 1. login.js com defer -->
+    <script src="{% static 'web/login.js' %}" defer></script>
+
+    <!-- 2. Google SDK APENAS com defer (sem async!) para garantir a ordem -->
+    <script src="https://accounts.google.com/gsi/client" defer></script>
+</head>
+<body class="auth-body">
+    <main class="auth-shell">
+        
+        <!-- Hero Section -->
+        <section class="hero-card">
+            <p class="eyebrow">Painel Financeiro</p>
+            <h1>Entre para gerenciar organizações, contas e fluxo de caixa.</h1>
+            <p class="hero-copy">
+                A interface usa a própria API JWT do projeto. Faça login ou crie sua conta para
+                navegar pelos dados principais e cadastrar itens essenciais sem sair do navegador.
+            </p>
+            <ul class="feature-list">
+                <li>Autenticação segura via JWT</li>
+                <li>Suporte a login rápido com Google SSO</li>
+                <li>Gestão de organizações e lançamentos</li>
+                <li>Resumo diário de fluxo de caixa</li>
+            </ul>
+        </section>
+
+        <!-- Form Card Section -->
+        <section class="auth-card">
+            
+            <!-- Alternador de Abas (Entrar / Cadastrar) -->
+            <div class="auth-tabs">
+                <button type="button" id="tab-login" class="tab-button active">Entrar</button>
+                <button type="button" id="tab-register" class="tab-button">Cadastrar</button>
+            </div>
+
+            <!-- Login com o Google SSO -->
+      	    <div class="social-auth-container">
+                <div id="g_id_onload"
+                    data-client_id="{{ google_client_id }}"
+                    data-callback="handleGoogleCredentialResponse"
+                    data-use_fedcm_for_prompt="false">
+                </div>
+                <div class="g_id_signin"
+                    data-type="standard"
+                    data-size="large"
+                    data-theme="outline">
+                </div>
+            </div>
+
+            <!-- Formulário de LOGIN -->
+            <form id="login-form" class="stack-form">
+                <label>
+                    <span>E-mail / Usuário</span>
+                    <input id="username" name="username" type="text" autocomplete="username" required placeholder="seu@email.com">
+                </label>
+
+                <label>
+                    <span>Senha</span>
+                    <input id="password" name="password" type="password" autocomplete="current-password" required placeholder="••••••••">
+                </label>
+
+                <button type="submit" class="primary-button">Entrar</button>
+            </form>
+
+            <!-- Formulário de CADASTRO (Inicia oculto) -->
+            <form id="register-form" class="stack-form hidden">
+                <label>
+                    <span>Nome Completo</span>
+                    <input id="reg-name" name="name" type="text" autocomplete="name" required placeholder="Ex: Maria Silva">
+                </label>
+
+                <label>
+                    <span>E-mail</span>
+                    <input id="reg-email" name="email" type="email" autocomplete="email" required placeholder="seu@email.com">
+                </label>
+
+                <label>
+                    <span>Senha</span>
+                    <input id="reg-password" name="password" type="password" autocomplete="new-password" required minlength="6" placeholder="Mínimo 6 caracteres">
+                </label>
+
+                <button type="submit" class="primary-button">Criar Minha Conta</button>
+            </form>
+
+            <!-- Feedback de Erro ou Sucesso -->
+            <p id="login-feedback" class="feedback" aria-live="polite"></p>
+
+            <div class="help-card">
+                <strong>Rotas úteis</strong>
+                <a href="/admin/" target="_blank" rel="noreferrer">Abrir admin</a>
+                <a href="/api/" target="_blank" rel="noreferrer">Abrir raiz da API</a>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
