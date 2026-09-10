@@ -43,7 +43,7 @@ jobs:
           script: |
             cd ~/cash-flow
             git pull origin main
-            source venv/bin/activate
-            pip install -r core/requirements.txt
+            source ~/venv/bin/activate
+            pip install -r requirements.txt
             python core/manage.py migrate --noinput
             python core/manage.py collectstatic --noinput
