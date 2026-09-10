@@ -23,7 +23,7 @@ jobs:
 
       - name: Django System Check
         run: |
-          python core/manage.py check
+          python manage.py check
 
   deploy:
     name: Deploy to GCP e2-micro
